@@ -1,6 +1,7 @@
 package com.casicloud.db;
 
 import com.casicloud.utils.JdbcUtil;
+import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 
 import java.lang.annotation.Target;
@@ -15,12 +16,29 @@ import java.util.Date;
  */
 public class ChangeDb {
 
+    public static void main(String[] args) {
+        System.out.println("开始更改sys_model表，将userName改为iotconfadmin，将userId改为10000054381916");
+        changeUsername();
+        System.out.println("完成更改sys_model表，完成将userName改为iotconfadmin，将userId改为10000054381916");
+        System.out.println("--------------------------------------------------------------------------------");
+        System.out.println("开始更改sys_model表，将creatTime的日期进行调整");
+        changeCreatTime();
+        System.out.println("完成更改sys_model表，完成将creatTime的日期进行调整");
+        System.out.println("--------------------------------------------------------------------------------");
+        System.out.println("开始更改operation_log表，将operator改为iotconfadmin");
+        changeOperator();
+        System.out.println("完成更改operation_log表，完成将operator改为iotconfadmin");
+        System.out.println("--------------------------------------------------------------------------------");
+        System.out.println("开始更改operation_log表，将operateDate时间进行调整");
+        changeOperateDate();
+        System.out.println("完成更改operation_log表，完成将operateDate时间进行调整");
+    }
 
     /**
      * 将sys_model表的userName改为iotconfadmin，
      */
     @Test
-    public void changeUsername(){
+    public static void changeUsername(){
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -36,7 +54,6 @@ public class ChangeDb {
             stmt.setString(1,"iotconfadmin");
             stmt.setLong(2,10000054381916L);
             int i = stmt.executeUpdate();
-            System.out.println(i);
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e);
@@ -48,7 +65,7 @@ public class ChangeDb {
      * 将operation_log表的operator改为iotconfadmin，
      */
     @Test
-    public void changeOperator(){
+    public static void changeOperator(){
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -62,7 +79,6 @@ public class ChangeDb {
 
             //设置参数
             int i = stmt.executeUpdate();
-            System.out.println(i);
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e);
@@ -76,7 +92,7 @@ public class ChangeDb {
      * 将operation_log表的operateDate时间进行调整
      */
     @Test
-    public void changeOperateDate(){
+    public static void changeOperateDate(){
 //        Connection modelConn = null;
 //        PreparedStatement stmt = null;
 //        ResultSet rs = null;
@@ -91,9 +107,8 @@ public class ChangeDb {
 
             ResultSet modelResultSet = modelStmt.executeQuery();
 
-            int i = 0;
+            int account = 0;
             while (modelResultSet.next()){
-                System.out.println(++i);
                 String modelCode = modelResultSet.getString("modelCode");
                 sql = "select * from sys_model WHERE modelCode = '"+modelCode+"'";
                 Connection modelChildConn = JdbcUtil.getConnection();
@@ -132,6 +147,7 @@ public class ChangeDb {
                     }
                 }
                 JdbcUtil.close(logConn, logStmt,logResultSet);
+                System.out.println(++account);
             }
             JdbcUtil.close(modelConn, modelStmt,modelResultSet);
         } catch (Exception e) {
@@ -147,7 +163,7 @@ public class ChangeDb {
      * 将sys_model表的creatTime
      */
     @Test
-    public void changeCreatTime(){
+    public static void changeCreatTime(){
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -162,7 +178,6 @@ public class ChangeDb {
 //            //设置参数
 //            stmt.setTimestamp(1,new Timestamp(1554360938000L));
 //            int i = stmt.executeUpdate();
-//            System.out.println(i);
 
 
             //sys_model表的id128~262的creatTime为2018-03-12
@@ -174,7 +189,6 @@ public class ChangeDb {
             ResultSet resultSet = stmt.executeQuery();
             int i=0;
             while (resultSet.next()){
-                System.out.println(++i);
                 Timestamp creatTime = resultSet.getTimestamp("creatTime");
                 long id = resultSet.getLong("id");
 //                SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
@@ -202,7 +216,6 @@ public class ChangeDb {
             resultSet = stmt.executeQuery();
             i=0;
             while (resultSet.next()){
-                System.out.println(++i);
                 Timestamp creatTime = resultSet.getTimestamp("creatTime");
                 long id = resultSet.getLong("id");
 //                SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
@@ -229,7 +242,6 @@ public class ChangeDb {
             resultSet = stmt.executeQuery();
             i=0;
             while (resultSet.next()){
-                System.out.println(++i);
                 Timestamp creatTime = resultSet.getTimestamp("creatTime");
                 long id = resultSet.getLong("id");
 //                SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
@@ -255,7 +267,6 @@ public class ChangeDb {
             resultSet = stmt.executeQuery();
             i=0;
             while (resultSet.next()){
-                System.out.println(++i);
                 Timestamp creatTime = resultSet.getTimestamp("creatTime");
                 long id = resultSet.getLong("id");
 //                SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
@@ -281,7 +292,6 @@ public class ChangeDb {
             resultSet = stmt.executeQuery();
             i=0;
             while (resultSet.next()){
-                System.out.println(++i);
                 Timestamp creatTime = resultSet.getTimestamp("creatTime");
                 long id = resultSet.getLong("id");
 //                SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
@@ -307,7 +317,6 @@ public class ChangeDb {
             resultSet = stmt.executeQuery();
             i=0;
             while (resultSet.next()){
-                System.out.println(++i);
                 Timestamp creatTime = resultSet.getTimestamp("creatTime");
                 long id = resultSet.getLong("id");
 //                SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
@@ -334,7 +343,6 @@ public class ChangeDb {
             resultSet = stmt.executeQuery();
             i=0;
             while (resultSet.next()){
-                System.out.println(++i);
                 Timestamp creatTime = resultSet.getTimestamp("creatTime");
                 long id = resultSet.getLong("id");
 //                SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
@@ -360,7 +368,6 @@ public class ChangeDb {
             resultSet = stmt.executeQuery();
             i=0;
             while (resultSet.next()){
-                System.out.println(++i);
                 Timestamp creatTime = resultSet.getTimestamp("creatTime");
                 long id = resultSet.getLong("id");
 //                SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
@@ -387,7 +394,6 @@ public class ChangeDb {
             resultSet = stmt.executeQuery();
             i=0;
             while (resultSet.next()){
-                System.out.println(++i);
                 Timestamp creatTime = resultSet.getTimestamp("creatTime");
                 long id = resultSet.getLong("id");
 //                SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
@@ -414,7 +420,6 @@ public class ChangeDb {
             resultSet = stmt.executeQuery();
             i=0;
             while (resultSet.next()){
-                System.out.println(++i);
                 Timestamp creatTime = resultSet.getTimestamp("creatTime");
                 long id = resultSet.getLong("id");
 //                SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
@@ -442,7 +447,6 @@ public class ChangeDb {
             resultSet = stmt.executeQuery();
             i=0;
             while (resultSet.next()){
-                System.out.println(++i);
                 Timestamp creatTime = resultSet.getTimestamp("creatTime");
                 long id = resultSet.getLong("id");
 //                SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
@@ -470,7 +474,6 @@ public class ChangeDb {
             resultSet = stmt.executeQuery();
             i=0;
             while (resultSet.next()){
-                System.out.println(++i);
                 Timestamp creatTime = resultSet.getTimestamp("creatTime");
                 long id = resultSet.getLong("id");
 //                SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
@@ -496,7 +499,6 @@ public class ChangeDb {
             resultSet = stmt.executeQuery();
             i=0;
             while (resultSet.next()){
-                System.out.println(++i);
                 Timestamp creatTime = resultSet.getTimestamp("creatTime");
                 long id = resultSet.getLong("id");
 //                SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
@@ -523,7 +525,6 @@ public class ChangeDb {
             resultSet = stmt.executeQuery();
             i=0;
             while (resultSet.next()){
-                System.out.println(++i);
                 Timestamp creatTime = resultSet.getTimestamp("creatTime");
                 long id = resultSet.getLong("id");
 //                SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
@@ -549,7 +550,6 @@ public class ChangeDb {
             resultSet = stmt.executeQuery();
             i=0;
             while (resultSet.next()){
-                System.out.println(++i);
                 Timestamp creatTime = resultSet.getTimestamp("creatTime");
                 long id = resultSet.getLong("id");
 //                SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
@@ -576,7 +576,6 @@ public class ChangeDb {
             resultSet = stmt.executeQuery();
             i=0;
             while (resultSet.next()){
-                System.out.println(++i);
                 Timestamp creatTime = resultSet.getTimestamp("creatTime");
                 long id = resultSet.getLong("id");
 //                SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
@@ -602,7 +601,6 @@ public class ChangeDb {
             resultSet = stmt.executeQuery();
             i=0;
             while (resultSet.next()){
-                System.out.println(++i);
                 Timestamp creatTime = resultSet.getTimestamp("creatTime");
                 long id = resultSet.getLong("id");
 //                SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
@@ -628,7 +626,6 @@ public class ChangeDb {
             resultSet = stmt.executeQuery();
             i=0;
             while (resultSet.next()){
-                System.out.println(++i);
                 Timestamp creatTime = resultSet.getTimestamp("creatTime");
                 long id = resultSet.getLong("id");
 //                SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
@@ -655,7 +652,6 @@ public class ChangeDb {
             resultSet = stmt.executeQuery();
             i=0;
             while (resultSet.next()){
-                System.out.println(++i);
                 Timestamp creatTime = resultSet.getTimestamp("creatTime");
                 long id = resultSet.getLong("id");
 //                SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
@@ -682,7 +678,6 @@ public class ChangeDb {
             resultSet = stmt.executeQuery();
             i=0;
             while (resultSet.next()){
-                System.out.println(++i);
                 Timestamp creatTime = resultSet.getTimestamp("creatTime");
                 long id = resultSet.getLong("id");
 //                SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
@@ -706,51 +701,4 @@ public class ChangeDb {
         }
     }
 
-    public static void main(String[] args) {
-
-        try {
-//            String string = "2019-10-24 21:59:06";
-//            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//            System.out.println(sdf.parse(string));
-            Date date = new Date(1553961600000L);
-            System.out.println(date);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Test
-    public void testByPreparedStatement1(){
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        try {
-            //获取连接
-            conn = JdbcUtil.getConnection();
-
-            String sql = "select * from sys_model WHERE id >= ? and id <= ?";
-
-            //预编译
-            stmt = conn.prepareStatement(sql);
-
-            //设置参数
-            stmt.setInt(1,128);
-            stmt.setInt(2,262);
-
-            rs = stmt.executeQuery();
-            int i = 0;
-            while (rs.next()){
-                System.out.println(i++);
-                String userName = rs.getString("userName");
-                System.out.println(userName);
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        } finally {
-            JdbcUtil.close(conn, stmt ,rs);
-        }
-    }
 }
